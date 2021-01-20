@@ -17,6 +17,8 @@ with amplitude 0.75 (scale of 0-1);
 a set of amplitudes to use for real actuators in a grid to generate
 a phantom actuator effect at specified coordinates. Actuator amplitude
 is determined using a Gaussian function exp(-(epsilon * dist)^2).;
+#X text 43 98 Based on the method done Yun \, Oh \, and Choi (doi:10.1109/WHC.2019.8816104)
+;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 3 0 1 0;
