@@ -1,0 +1,22 @@
+#N canvas 429 477 750 397 12;
+#X msg 39 154 shape 0.25;
+#X obj 39 247 gphantom 2 3;
+#X obj 39 272 print gphantom;
+#X msg 132 207 1.6 2.3 0.75;
+#X text 125 152 Change the shape parameter to 0.25 (the default is
+0.5);
+#X text 151 240 Create an instance with a 2 by 3 grid of actuators.
+It is assumed that they are equally spaced.;
+#X text 40 297 The amplitude values to use for each actuator are printed
+when given a list of parameters. They are in the order of increasing
+x then increasing y (e.g. \, (0 \, 0) \, then (1 \, 0) \, then (2 \,
+0) \, then (0 \, 1) \, etc.);
+#X text 233 195 Get amplitudes for a phantom actuator at (1.6 \, 2.3)
+with amplitude 0.75 (scale of 0-1);
+#X text 43 10 Gaussian phantom actuator illusion tool. This generates
+a set of amplitudes to use for real actuators in a grid to generate
+a phantom actuator effect at specified coordinates. Actuator amplitude
+is determined using a Gaussian function exp(-(epsilon * dist)^2).;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 3 0 1 0;

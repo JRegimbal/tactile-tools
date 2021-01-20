@@ -91,4 +91,6 @@ void gphantom_setup(void) {
   class_addbang(gphantom_class, (t_method)gphantom_bang);
   class_addlist(gphantom_class, (t_method)gphantom_list);
   class_addmethod(gphantom_class, (t_method)gphantom_shape, gensym("shape"), A_DEFFLOAT, 0);
+
+  class_sethelpsymbol(gphantom_class, gensym("docs/gphantom"));
 }
