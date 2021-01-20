@@ -14,6 +14,7 @@ typedef struct _gphantom {
   t_object x_obj;
   t_int i_n, i_m;        // n x m dense grid approach
   t_float f_x, f_y, f_a; // (x, y) and amplitude
+  t_float f_epsilon;     // shape parameter for Gaussian
 } t_gphantom;
 
 void gphantom_set(t_gphantom *x, t_floatarg f1, t_floatarg f2, t_floatarg f3) {
@@ -40,7 +41,7 @@ void gphantom_bang(t_gphantom *x) {
     for (int j = 0; j < x->i_n; j++) { // y coord
       t_float distance =
           (float)sqrt(pow((float)i - x->f_x, 2) + pow((float)j - x->f_y, 2));
-      t_float amp = x->f_a * gaussian(EPSILON, distance);
+      t_float amp = x->f_a * gaussian(x->f_epsilon, distance);
       size_t index = (i * x->i_n) + j;
       SETFLOAT(argv + index, amp);
     }
@@ -64,11 +65,17 @@ void gphantom_list(t_gphantom *x, t_symbol *s, t_int argc, t_atom *argv) {
   }
 }
 
+void gphantom_shape(t_gphantom *x, t_float f) {
+  x->f_epsilon = f;
+  post("[gphantom ]: shape parameter updated to %f", x->f_epsilon);
+}
+
 void *gphantom_new(t_floatarg n, t_floatarg m) {
   t_gphantom *x = (t_gphantom *)pd_new(gphantom_class);
 
   x->i_n = n;
   x->i_m = m;
+  x->f_epsilon = EPSILON;
   gphantom_reset(x);
   outlet_new(&x->x_obj, &s_list);
 
@@ -83,4 +90,5 @@ void gphantom_setup(void) {
                 sizeof(t_gphantom), CLASS_DEFAULT, A_DEFFLOAT, A_DEFFLOAT, 0);
   class_addbang(gphantom_class, (t_method)gphantom_bang);
   class_addlist(gphantom_class, (t_method)gphantom_list);
+  class_addmethod(gphantom_class, (t_method)gphantom_shape, gensym("shape"), A_DEFFLOAT, 0);
 }
