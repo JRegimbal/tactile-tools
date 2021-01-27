@@ -12,14 +12,14 @@ static t_class *gphantom_class;
 
 typedef struct _gphantom {
   t_object x_obj;
-  t_int i_n, i_m;        // n x m dense grid approach
+  t_int i_xMax, i_yMax;        // n x m dense grid approach
   t_float f_x, f_y, f_a; // (x, y) and amplitude
   t_float f_epsilon;     // shape parameter for Gaussian
 } t_gphantom;
 
 void gphantom_set(t_gphantom *x, t_floatarg f1, t_floatarg f2, t_floatarg f3) {
-  x->f_x = MIN(x->i_m - 1, MAX(0, f1));
-  x->f_y = MIN(x->i_n - 1, MAX(0, f2));
+  x->f_x = MIN(x->i_xMax - 1, MAX(0, f1));
+  x->f_y = MIN(x->i_yMax - 1, MAX(0, f2));
   x->f_a = MAX(0, f3);
 }
 
@@ -34,15 +34,16 @@ t_float gaussian(t_float epsilon, t_float r) {
 }
 
 void gphantom_bang(t_gphantom *x) {
-  int argc = x->i_n * x->i_m;
+  int argc = x->i_xMax * x->i_yMax;
   t_atom *argv = (t_atom *)getbytes(sizeof(t_atom) * argc);
 
-  for (int i = 0; i < x->i_m; i++) {   // x coord
-    for (int j = 0; j < x->i_n; j++) { // y coord
+  for (int i = 0; i < x->i_xMax; i++) {   // x coord
+    for (int j = 0; j < x->i_yMax; j++) { // y coord
       t_float distance =
           (float)sqrt(pow((float)i - x->f_x, 2) + pow((float)j - x->f_y, 2));
+      post("Distance: %f", distance);
       t_float amp = x->f_a * gaussian(x->f_epsilon, distance);
-      size_t index = (i * x->i_n) + j;
+      size_t index = (i * x->i_yMax) + j;
       SETFLOAT(argv + index, amp);
     }
   }
@@ -70,16 +71,16 @@ void gphantom_shape(t_gphantom *x, t_float f) {
   post("[gphantom ]: shape parameter updated to %f", x->f_epsilon);
 }
 
-void *gphantom_new(t_floatarg n, t_floatarg m) {
+void *gphantom_new(t_floatarg xMax, t_floatarg yMax) {
   t_gphantom *x = (t_gphantom *)pd_new(gphantom_class);
 
-  x->i_n = n;
-  x->i_m = m;
+  x->i_xMax = xMax;
+  x->i_yMax = yMax;
   x->f_epsilon = EPSILON;
   gphantom_reset(x);
   outlet_new(&x->x_obj, &s_list);
 
-  post("[gphantom ]: created instance with %ld by %ld grid", x->i_n, x->i_m);
+  post("[gphantom ]: created instance with %ld by %ld grid", x->i_xMax, x->i_yMax);
 
   return (void *)x;
 }

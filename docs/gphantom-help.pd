@@ -7,10 +7,6 @@
 0.5);
 #X text 151 240 Create an instance with a 2 by 3 grid of actuators.
 It is assumed that they are equally spaced.;
-#X text 40 297 The amplitude values to use for each actuator are printed
-when given a list of parameters. They are in the order of increasing
-x then increasing y (e.g. \, (0 \, 0) \, then (1 \, 0) \, then (2 \,
-0) \, then (0 \, 1) \, etc.);
 #X text 233 195 Get amplitudes for a phantom actuator at (1.6 \, 2.3)
 with amplitude 0.75 (scale of 0-1);
 #X text 43 10 Gaussian phantom actuator illusion tool. This generates
@@ -19,6 +15,10 @@ a phantom actuator effect at specified coordinates. Actuator amplitude
 is determined using a Gaussian function exp(-(epsilon * dist)^2).;
 #X text 43 98 Based on the method done Yun \, Oh \, and Choi (doi:10.1109/WHC.2019.8816104)
 ;
+#X text 40 297 The amplitude values to use for each actuator are printed
+when given a list of parameters. They are in the order of increasing
+y then increasing x (e.g. \, (0 \, 0) \, then (0 \, 1) \, then (0 \,
+2) \, then (1 \, 0) \, etc.);
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 3 0 1 0;
